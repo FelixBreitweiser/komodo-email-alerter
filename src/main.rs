@@ -1,3 +1,8 @@
+use crate::errors::{
+    bind_listener_error, create_mailer_error, create_message_error, html_tidier_error,
+    send_message_error, serve_web_error, template_load_error, template_parse_error,
+    template_render_error,
+};
 use crate::mailer::create_mailer;
 use crate::settings::Settings;
 use axum::extract::State;
@@ -11,10 +16,12 @@ use lettre::{AsyncSmtpTransport, AsyncTransport, Message, Tokio1Executor};
 use minijinja::Environment;
 use regex::Regex;
 use std::path::Path;
+use std::process::ExitCode;
 use std::sync::Arc;
 use tidier::FormatOptions;
 use tokio::io::AsyncReadExt;
 
+mod errors;
 mod mailer;
 mod settings;
 
@@ -26,26 +33,31 @@ struct AppState {
 }
 
 #[tokio::main(flavor = "current_thread")]
-async fn main() {
+async fn main() -> ExitCode {
+    run().await.unwrap_or_else(|e| e)
+}
+
+async fn run() -> Result<ExitCode, ExitCode> {
     let settings = Settings::parse();
     let mut template_env = Environment::new();
     let clean_regex = Regex::new("\\s+").unwrap();
 
     let body_template = load_template(&settings, &settings.body_template_name)
         .await
-        .expect("failed to load body template");
+        .map_err(template_load_error)?;
+
     let subject_template = load_template(&settings, &settings.subject_template_name)
         .await
-        .expect("failed to load subject template");
+        .map_err(template_load_error)?;
 
     template_env
         .add_template_owned("body".to_owned(), body_template)
-        .expect("syntax error in body template");
+        .map_err(template_parse_error)?;
     template_env
         .add_template_owned("subject".to_owned(), subject_template)
-        .expect("syntax error in subject template");
+        .map_err(template_parse_error)?;
 
-    let mailer = create_mailer(&settings).expect("failed to create mailer");
+    let mailer = create_mailer(&settings).map_err(create_mailer_error)?;
 
     // build our application with a single route
     let app = Router::new()
@@ -58,15 +70,18 @@ async fn main() {
         }));
 
     // run our app with hyper, listening globally on port 3000
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
+        .await
+        .map_err(bind_listener_error)?;
+    axum::serve(listener, app).await.map_err(serve_web_error)?;
+    Ok(ExitCode::SUCCESS)
 }
 
 async fn handle_alert(
     State(state): State<Arc<AppState>>,
     Json(alert): Json<Alert>,
 ) -> Result<(), (StatusCode, String)> {
-    println!("handling {:?}", alert);
+    println!("[INFO] handling {:?}", alert);
     let mut m = Message::builder().from(state.settings.smtp_sender.clone());
 
     if let Some(reply_to) = state.settings.smtp_reply_to.clone() {
@@ -78,13 +93,12 @@ async fn handle_alert(
 
     let subject = subject_template
         .render(&alert)
-        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+        .map_err(template_render_error)?;
     let body = body_template
         .render(&alert)
-        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+        .map_err(template_render_error)?;
 
-    let body = tidier::format(body, false, &FormatOptions::default())
-        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+    let body = tidier::format(body, false, &FormatOptions::default()).map_err(html_tidier_error)?;
 
     let subject = state
         .clean_regex
@@ -96,15 +110,13 @@ async fn handle_alert(
     m = m.subject(subject);
     m = m.header(ContentType::TEXT_HTML);
 
-    let m = m
-        .body(body)
-        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+    let m = m.body(body).map_err(create_message_error)?;
 
     state
         .mailer
         .send(m.into())
         .await
-        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+        .map_err(send_message_error)?;
     Ok(())
 }
 
