@@ -1,0 +1,52 @@
+{% set type = data.type %}
+{% set data = data.data %}
+
+<p>
+    {% if resolved %}&#x2705;{# checkmark #}{% else %}&#x26D4;{# no entry sign #}{% endif %}
+    [{{level}}] {{type}}
+    {% if data.name %}
+        for {{data.name}}
+    {% endif %}
+    {% if data.server_name %}
+        on {{data.server_name}}
+    {% endif %}
+</p>
+
+<p>
+    {% if type == "ServerCpu" %}
+        Hit <strong>{{data.percentage|round(2)}}%</strong>
+    {% elif type == "ServerMem" %}
+        Used <strong>{{data.used_gb|round(2)}}/{{data.total_gb|round(2)}}GB</strong>
+    {% elif type == "ServerDisk" %}
+        Disk at <strong>{{data.path}}</strong> used <strong>{{data.used_gb|round(2)}}/{{data.total_gb|round(2)}}GB</strong>
+    {% elif type == "StackImageUpdateAvailable" %}
+        Service <strong>{{data.service}}</strong> | Image <strong>{{data.image}}</strong>
+    {% elif type == "DeploymentAutoUpdated" %}
+        Updated <strong>{{data.image}}</strong>
+    {% elif type == "DeploymentImageUpdateAvailable" %}
+        Updated available for <strong>{{data.image}}</strong>
+    {% elif type == "AwsBuilderTerminationFailed" %}
+        Instance <strong>{{data.instance_id}}</strong> | Reason <strong>{{data.message}}</strong>
+    {% elif type == "StackAutoUpdated" %}
+        Updated:
+        <ul>
+            {% for image in data.images %}
+            <li>{{image}}</li>
+            {% endfor %}
+        </ul>
+    {% elif type == "None" %}
+    {% else %}
+        {% if data.err %}
+        Err: <pre>{{data.err}}</pre>
+        {% endif %}
+        {% if data.from %}
+        From: <strong>{{data.from}}</strong>
+        {% endif %}
+        {% if data.to %}
+        To: <strong>{{data.to}}</strong>
+        {% endif %}
+        {% if data.version %}
+        Version: <strong>{{data.version}}</strong>
+        {% endif %}
+    {% endif %}
+</p>

@@ -1,0 +1,19 @@
+{
+  "level": "CRITICAL",
+  "ts": 1750833965439,
+  "resolved": true,
+  "target": {
+    "type": "Server",
+    "id": "MyServer"
+  },
+  "data": {
+    "type": "ServerDisk",
+    "data": {
+      "used_gb": 97.1234,
+      "total_gb": 99.9665,
+      "path": "/my/cool/path",
+      "id": "Something",
+      "name": "MyInstance"
+    }
+  }
+}

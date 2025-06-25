@@ -1,0 +1,17 @@
+{
+  "level": "CRITICAL",
+  "ts": 1750833943144,
+  "resolved": true,
+  "target": {
+    "type": "Server",
+    "id": "MyServer"
+  },
+  "data": {
+    "type": "ServerCpu",
+    "data": {
+      "percentage": 87.187123,
+      "id": "Something",
+      "name": "MyInstance"
+    }
+  }
+}

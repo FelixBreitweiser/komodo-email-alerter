@@ -1,0 +1,16 @@
+{
+  "level": "OK",
+  "ts": 1750833900530,
+  "resolved": true,
+  "target": {
+    "type": "Server",
+    "id": "MyServer"
+  },
+  "data": {
+    "type": "AwsBuilderTerminationFailed",
+    "data": {
+      "instance_id": "MyInstance",
+      "message": "some message"
+    }
+  }
+}

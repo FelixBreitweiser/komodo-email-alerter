@@ -1,0 +1,11 @@
+{% set type = data.type %}
+{% set data = data.data %}
+
+{% if resolved %}✅{% else %}⛔{% endif %}
+[{{ level }}] {{ type }}
+{% if data.name %}
+    for {{data.name}}
+{% endif %}
+{% if data.server_name %}
+    on {{data.server_name}}
+{% endif %}

@@ -1,0 +1,21 @@
+{
+  "level": "OK",
+  "ts": 1750834028052,
+  "resolved": true,
+  "target": {
+    "type": "Stack",
+    "id": "675f2b0370fff236be04d528"
+  },
+  "data": {
+    "type": "StackAutoUpdated",
+    "data": {
+      "id": "675f2b0370fff236be04d528",
+      "name": "MyStack",
+      "server_id": "1234",
+      "server_name": "MyServer",
+      "images": [
+        "redacted/redacted:latest"
+      ]
+    }
+  }
+}

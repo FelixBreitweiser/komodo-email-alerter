@@ -1,0 +1,18 @@
+{
+  "level": "CRITICAL",
+  "ts": 1750833983991,
+  "resolved": true,
+  "target": {
+    "type": "Server",
+    "id": "MyServer"
+  },
+  "data": {
+    "type": "ServerMem",
+    "data": {
+      "used_gb": 97.1234,
+      "total_gb": 99.9665,
+      "id": "Something",
+      "name": "MyInstance"
+    }
+  }
+}

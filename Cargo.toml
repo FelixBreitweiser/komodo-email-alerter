@@ -1,0 +1,14 @@
+[package]
+name = "komodo-email-alerter"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tokio = { version = "1.45.1", features = ["full"] }
+axum = { version = "0.8.4", features = ["tokio", "json"] }
+clap = { version = "4.5.40", features = ["derive", "env"] }
+komodo_client = "1.18.3"
+lettre = { version = "0.11.17", default-features = false, features = ["builder", "hostname", "smtp-transport", "pool", "tokio1-rustls", "aws-lc-rs", "rustls-platform-verifier"] }
+minijinja = { version = "2.10.2", features = ["loader"] }
+regex = "1.11.1"
+tidier = "0.5.3"

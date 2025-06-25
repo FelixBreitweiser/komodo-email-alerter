@@ -1,0 +1,17 @@
+{
+    "ts": 1750781744344,
+    "resolved": true,
+    "level": "OK",
+    "target": {
+      "type": "Alerter",
+      "id": "685acdfafaeb644307200146"
+    },
+    "data": {
+        "type": "Test",
+        "data": {
+            "id": "685acdfafaeb644307200146",
+            "name": "mail"
+        }
+    },
+    "resolved_ts": 1750781744344
+}
