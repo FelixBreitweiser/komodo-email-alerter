@@ -8,6 +8,8 @@ jobs:
     steps:
       - name: Check out the tag
         uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
       - name: Setup buildx
         uses: docker/setup-buildx-action@v3
       - name: Login to Docker Hub
