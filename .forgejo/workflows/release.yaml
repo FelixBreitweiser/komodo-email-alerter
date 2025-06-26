@@ -4,7 +4,7 @@ on:
       - "*"
 jobs:
   build:
-    runs-on: docker
+    runs-on: alpine
     steps:
       - name: Check out the tag
         uses: actions/checkout@v4
