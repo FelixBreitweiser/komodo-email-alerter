@@ -8,8 +8,6 @@ jobs:
     steps:
       - name: Check out the tag
         uses: actions/checkout@v4
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
       - name: Setup buildx
         uses: docker/setup-buildx-action@v3
       - name: Login to Docker Hub
@@ -23,5 +21,5 @@ jobs:
         with:
           push: true
           tags: |
-            git.bs.informatik.uni-siegen.de/breitweiser/komodo-email-alerter:latest
-            git.bs.informatik.uni-siegen.de/breitweiser/komodo-email-alerter:${{ env.GITHUB_REF_NAME }}
+            git.bs.informatik.uni-siegen.de/${{ env.GITHUB_REPOSITORY }}:latest
+            git.bs.informatik.uni-siegen.de/${{ env.GITHUB_REPOSITORY }}:${{ env.GITHUB_REF_NAME }}
