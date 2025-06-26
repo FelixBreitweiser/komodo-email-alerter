@@ -16,8 +16,8 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: git.bs.informatik.uni-siegen.de
-          username: ${{ vars.FORGEJO_USERNAME }}
-          password: ${{ secrets.FORGEJO_TOKEN }}
+          username: ${{ vars.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
