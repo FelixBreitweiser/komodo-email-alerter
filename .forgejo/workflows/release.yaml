@@ -21,5 +21,5 @@ jobs:
         with:
           push: true
           tags:
-            - git.bs.informatik.uni-siegen.de/breitweiser/komodo-email-alerter:latest
-            - git.bs.informatik.uni-siegen.de/breitweiser/komodo-email-alerter:${{ env.GITHUB_REF_NAME }}
+            - "git.bs.informatik.uni-siegen.de/breitweiser/komodo-email-alerter:latest"
+            - "git.bs.informatik.uni-siegen.de/breitweiser/komodo-email-alerter:${{ env.GITHUB_REF_NAME }}"
