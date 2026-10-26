@@ -20,6 +20,7 @@ COPY --from=build --chmod=777 /app/target/x86_64-unknown-linux-musl/release/komo
 
 COPY templates /templates
 
-EXPOSE 80
 ENV TEMPLATE_DIR=/templates
+ENV LISTEN_ADDRESS="0.0.0.0:80"
+EXPOSE 80
 ENTRYPOINT ["/app/komodo-email-alerter"]

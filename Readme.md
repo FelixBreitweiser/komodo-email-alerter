@@ -20,7 +20,7 @@ services:
       SMTP_SENDER: "Sender <sender@example.com>"
       RECEIVER: "Receiver <receiver@example.com>"
     ports:
-      - 3000:3000
+      - "80:80" # customize your host port here
 ```
 
 Edit the environment variables according to your needs.

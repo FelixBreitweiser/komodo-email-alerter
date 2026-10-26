@@ -58,6 +58,7 @@ async fn run() -> Result<ExitCode, ExitCode> {
         .map_err(template_parse_error)?;
 
     let mailer = create_mailer(&settings).map_err(create_mailer_error)?;
+    let listen_address = settings.listen_address.clone();
 
     // build our application with a single route
     let app = Router::new()
@@ -69,8 +70,8 @@ async fn run() -> Result<ExitCode, ExitCode> {
             clean_regex,
         }));
 
-    // run our app with hyper, listening globally on port 3000
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
+    // run our app with hyper
+    let listener = tokio::net::TcpListener::bind(listen_address)
         .await
         .map_err(bind_listener_error)?;
     axum::serve(listener, app).await.map_err(serve_web_error)?;

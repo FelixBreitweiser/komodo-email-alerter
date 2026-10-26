@@ -1,8 +1,12 @@
+use std::net::SocketAddr;
 use clap::Parser;
 use lettre::message::Mailbox;
 
 #[derive(Parser, Debug)]
 pub struct Settings {
+    #[clap(long, env="LISTEN_ADDRESS", default_value="0.0.0.0:3000")]
+    pub listen_address: SocketAddr,
+
     #[clap(long, env="SMTP_HOST")]
     pub smtp_host: String,
 
@@ -32,4 +36,10 @@ pub struct Settings {
 
     #[clap(long, env="SUBJECT_TEMPLATE_NAME", default_value="subject.txt")]
     pub subject_template_name: String,
+
+    #[clap(long, env="DANGEROUS_ACCEPT_INVALID_CERTS", default_value_t=false)]
+    pub dangerous_accept_invalid_certs: bool,
+
+    #[clap(long, env="DANGEROUS_ACCEPT_INVALID_HOSTNAMES", default_value_t=false)]
+    pub dangerous_accept_invalid_hostnames: bool,
 }

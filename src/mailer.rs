@@ -25,8 +25,8 @@ pub fn create_mailer(settings: &Settings) -> Result<AsyncSmtpTransport<Tokio1Exe
     let creds = Credentials::new(settings.smtp_user.clone(), settings.smtp_pass.clone());
 
     let tls = TlsParameters::builder(settings.smtp_host.clone())
-        .dangerous_accept_invalid_certs(true)
-        .dangerous_accept_invalid_hostnames(true)
+        .dangerous_accept_invalid_certs(settings.dangerous_accept_invalid_certs)
+        .dangerous_accept_invalid_hostnames(settings.dangerous_accept_invalid_hostnames)
         .build()?;
 
     let mailer = AsyncSmtpTransport::<Tokio1Executor>::relay(&settings.smtp_host)?
