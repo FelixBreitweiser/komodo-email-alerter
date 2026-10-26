@@ -9,7 +9,7 @@ Using the following docker compose configuration:
 ```yaml
 services:
   alerter:
-    image: git.bs.informatik.uni-siegen.de/breitweiser/komodo-email-alerter:latest
+    image: ghcr.io/felixbreitweiser/komodo-email-alerter:latest
     container_name: komodo-email-alerter
     environment:
       SMTP_HOST: my.mail.server
