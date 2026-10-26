@@ -2,7 +2,7 @@ FROM rust:latest AS build
 
 RUN rustup target add x86_64-unknown-linux-musl
 RUN apt-get update -y
-RUN apt-get install musl-dev musl-tools clang libclang-dev cmake -y
+RUN apt-get install musl-dev musl-tools clang libclang-dev libssl-dev cmake -y
 
 WORKDIR /app
 COPY Cargo.toml Cargo.lock .
