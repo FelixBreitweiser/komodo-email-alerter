@@ -14,11 +14,11 @@ use komodo_client::entities::alert::Alert;
 use lettre::message::header::ContentType;
 use lettre::{AsyncSmtpTransport, AsyncTransport, Message, Tokio1Executor};
 use minijinja::Environment;
+use minijinja::value::Serde;
 use regex::Regex;
 use std::path::Path;
 use std::process::ExitCode;
 use std::sync::Arc;
-use minijinja::value::Serde;
 use tidier::FormatOptions;
 use tokio::io::AsyncReadExt;
 
@@ -75,7 +75,14 @@ async fn run() -> Result<ExitCode, ExitCode> {
     let listener = tokio::net::TcpListener::bind(listen_address)
         .await
         .map_err(bind_listener_error)?;
-    axum::serve(listener, app).await.map_err(serve_web_error)?;
+    axum::serve(listener, app)
+        .with_graceful_shutdown(async {
+            tokio::signal::ctrl_c()
+                .await
+                .expect("failed to listen to ctrl-c");
+        })
+        .await
+        .map_err(serve_web_error)?;
     Ok(ExitCode::SUCCESS)
 }
 
