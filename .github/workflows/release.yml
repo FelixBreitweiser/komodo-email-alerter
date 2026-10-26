@@ -1,0 +1,29 @@
+name: Docker Image CI
+
+on:
+  push:
+    tags: "*"
+
+jobs:
+  build:
+    permissions: 
+      packages: write
+    runs-on: ubuntu-latest
+    steps:
+    - name: Chckeout the tag
+      uses: actions/checkout@v4
+    - name: Login to ghcr.io
+      uses: docker/login-action@v4.7.0
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ github.token }}
+    - name: Build the Docker image
+      uses: docker/build-push-action@v7.4.0
+      with:
+        push: true
+        tags: |
+          ghcr.io/${{ github.repository }}:latest
+          ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+        
+
