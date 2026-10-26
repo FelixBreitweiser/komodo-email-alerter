@@ -18,6 +18,7 @@ use regex::Regex;
 use std::path::Path;
 use std::process::ExitCode;
 use std::sync::Arc;
+use minijinja::value::Serde;
 use tidier::FormatOptions;
 use tokio::io::AsyncReadExt;
 
@@ -93,10 +94,10 @@ async fn handle_alert(
     let subject_template = state.template_env.get_template("subject").unwrap();
 
     let subject = subject_template
-        .render(&alert)
+        .render(Serde(&alert))
         .map_err(template_render_error)?;
     let body = body_template
-        .render(&alert)
+        .render(Serde(&alert))
         .map_err(template_render_error)?;
 
     let body = tidier::format(body, false, &FormatOptions::default()).map_err(html_tidier_error)?;
